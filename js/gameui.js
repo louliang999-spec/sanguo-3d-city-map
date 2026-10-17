@@ -973,7 +973,12 @@ function pageSave(body) {
   `;
   body.querySelector('[data-save]').onclick = () => { G.save(); toast('已保存'); };
   body.querySelector('[data-end]').onclick = () => doEndTurn();
-  body.querySelector('[data-admin]').onclick = () => window.open('admin.html', '_blank');
+  body.querySelector('[data-admin]').onclick = () => {
+    /* 用文档真实路径拼绝对地址：线上首页用了 <base> 指向 CDN，
+       不能直接 open('admin.html')，否则会打开 CDN 上的纯文本。 */
+    const dir = location.origin + location.pathname.replace(/[^/]*$/, '');
+    window.open(dir + 'admin.html', '_blank');
+  };
   body.querySelector('[data-reset]').onclick = () => { if (confirm('确定重新开局？当前进度会清空。')) { G.reset(); closePage(); panelChooseFaction(); } };
 }
 
