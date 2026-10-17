@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>家长后台 · 三国 · 群英学习志</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect cx='6' cy='6' width='20' height='20' fill='%23f4ecd8' stroke='%231a1a1a' stroke-width='2'/%3E%3C/svg%3E" />
+<style>
+  :root {
+    --paper: #f4ecd8;
+    --ink: #1a1a1a;
+    --ink-dim: #4a4237;
+    --line: #b9a77e;
+    --accent: #8a6d3b;
+    --good: #1d6b38;
+    --bad: #a03024;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 24px 18px 60px;
+    background:
+      linear-gradient(rgba(20, 16, 10, 0.35), rgba(20, 16, 10, 0.35)),
+      url("./img/bg-admin.png") center / cover no-repeat fixed,
+      #2b2418;
+    color: var(--ink);
+    font-family: "Kaiti SC", "KaiTi", "STKaiti", "Microsoft YaHei", system-ui, sans-serif;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; }
+  h1 {
+    margin: 0 0 4px;
+    font-size: 26px; letter-spacing: 6px; color: #f4ecd8;
+    text-align: center;
+  }
+  .sub { margin: 0 0 22px; text-align: center; color: rgba(244, 236, 216, 0.55); font-size: 13px; }
+  section {
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    outline: 2px solid var(--ink);
+    outline-offset: 3px;
+    border-radius: 4px;
+    padding: 16px 18px 20px;
+    margin-bottom: 22px;
+  }
+  section h2 {
+    margin: 0 0 12px;
+    font-size: 17px; letter-spacing: 2px;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 8px;
+  }
+  section h2 small { font-weight: 400; font-size: 12px; color: var(--ink-dim); letter-spacing: 0; margin-left: 10px; }
+  p.lead { margin: 0 0 10px; font-size: 13px; color: var(--ink-dim); line-height: 1.8; }
+  label { font-size: 13px; color: var(--ink-dim); }
+  input, select {
+    padding: 5px 8px;
+    border: 1.5px solid var(--ink);
+    border-radius: 4px;
+    background: #fbf5e4;
+    color: var(--ink);
+    font-family: inherit;
+    font-size: 13px;
+  }
+  input[type="number"] { width: 84px; }
+  button {
+    padding: 7px 14px;
+    border: 1.5px solid var(--ink);
+    border-radius: 4px;
+    background: #efe6cf;
+    color: var(--ink);
+    font-family: inherit; font-size: 13.5px;
+    cursor: pointer;
+  }
+  button:hover { background: #e3d5b1; }
+  button.go { background: linear-gradient(180deg, #ffd166, #e8a93c); font-weight: 700; }
+  button.danger { background: #d98a80; color: #3a0d08; }
+  button.sm { padding: 3px 9px; font-size: 12px; }
+  .row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+  .row b { min-width: 64px; font-size: 13.5px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { border: 1px solid var(--line); padding: 6px 8px; text-align: left; }
+  th { background: rgba(138, 109, 59, 0.12); font-size: 12px; letter-spacing: 1px; }
+  td.dim { color: var(--ink-dim); }
+  .pill { display: inline-block; padding: 1px 8px; border-radius: 4px; border: 1px solid var(--ink); font-size: 11px; }
+  .pill.daily { background: #d8e6c8; }
+  .pill.challenge { background: #e6d7b2; }
+  .msg { margin: 10px 0 0; font-size: 13px; min-height: 18px; }
+  .msg.ok { color: var(--good); }
+  .msg.bad { color: var(--bad); }
+  .stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; margin-bottom: 12px; }
+  .stat { border: 1px solid var(--line); border-radius: 4px; padding: 8px 10px; text-align: center; }
+  .stat b { display: block; font-size: 22px; }
+  .stat span { font-size: 11px; color: var(--ink-dim); }
+  #loginBox { max-width: 380px; margin: 60px auto; text-align: center; }
+  #loginBox input { width: 160px; text-align: center; letter-spacing: 4px; }
+  .locked { filter: blur(0); }
+  .hidden { display: none; }
+  .hintline { font-size: 11.5px; color: var(--ink-dim); margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>家长后台</h1>
+  <p class="sub">三国 · 群英学习志 —— 任务 / 难度 / 统计 / 存档</p>
+
+  <section id="loginBox">
+    <h2>🔒 请输入家长密码</h2>
+    <div class="row" style="justify-content:center">
+      <input type="password" id="pwd" placeholder="密码" />
+      <button class="go" id="btnLogin">进入</button>
+    </div>
+    <p class="hintline">默认密码 2024，可在下方「安全设置」里修改。</p>
+    <p class="msg" id="loginMsg"></p>
+  </section>
+
+  <div id="adminBody" class="hidden">
+    <section>
+      <h2>📋 打卡任务 <small>所有任务均可编辑、删除；点击下方「恢复默认任务」可一键还原内置表</small></h2>
+      <p class="lead">每日任务（cat=每日）计入「出征解锁」数量；奖励字段填 0 表示不发放。</p>
+      <div id="taskList"></div>
+
+      <h2 style="margin-top:16px; font-size:14px;">＋ 新增任务</h2>
+      <div id="addTaskForm">
+        <div class="row">
+          <input type="text" id="ntName" placeholder="任务名（如：文言文翻译）" style="width:160px" />
+          <input type="text" id="ntIcon" placeholder="图标" style="width:56px" value="📝" />
+          <select id="ntCat">
+            <option value="daily">每日必做</option>
+            <option value="challenge">自选挑战</option>
+          </select>
+          <label>解锁<select id="ntUnlock">
+            <option value="">无</option>
+            <option value="farm">屯田</option>
+            <option value="recruit">募兵</option>
+            <option value="search">寻访</option>
+            <option value="fortify">加固</option>
+          </select></label>
+        </div>
+        <div class="row">
+          <label>粮<input type="number" id="ntFood" value="0" min="0" /></label>
+          <label>兵<input type="number" id="ntSol" value="0" min="0" /></label>
+          <label>金<input type="number" id="ntGold" value="0" min="0" /></label>
+          <label>星<input type="number" id="ntShard" value="0" min="0" /></label>
+        </div>
+        <div class="row">
+          <label><input type="checkbox" id="ntFix" />需订正</label>
+          <label><input type="checkbox" id="ntTrain" />奖励培养</label>
+          <label><input type="checkbox" id="ntGrantSearch" />奖励寻访机会</label>
+        </div>
+        <div class="row">
+          <input type="text" id="ntDesc" placeholder="任务描述" style="flex:1;min-width:200px" />
+          <input type="text" id="ntHint" placeholder="提示语（如：解锁【屯田】）" style="flex:1;min-width:200px" />
+          <button class="go" id="btnAddTask">添加</button>
+        </div>
+      </div>
+
+      <div id="editBox" class="hidden" style="margin-top:14px;padding:12px;background:rgba(138,109,59,0.08);border:1px solid var(--line);border-radius:4px;">
+        <h2 style="font-size:14px;border-bottom:0;padding-bottom:0;">✏️ 编辑任务</h2>
+        <input type="hidden" id="etIdx" />
+        <div class="row">
+          <input type="text" id="etName" placeholder="任务名" style="width:160px" />
+          <input type="text" id="etIcon" placeholder="图标" style="width:56px" />
+          <select id="etCat">
+            <option value="daily">每日必做</option>
+            <option value="challenge">自选挑战</option>
+          </select>
+          <label>解锁<select id="etUnlock">
+            <option value="">无</option>
+            <option value="farm">屯田</option>
+            <option value="recruit">募兵</option>
+            <option value="search">寻访</option>
+            <option value="fortify">加固</option>
+          </select></label>
+        </div>
+        <div class="row">
+          <label>粮<input type="number" id="etFood" value="0" min="0" /></label>
+          <label>兵<input type="number" id="etSol" value="0" min="0" /></label>
+          <label>金<input type="number" id="etGold" value="0" min="0" /></label>
+          <label>星<input type="number" id="etShard" value="0" min="0" /></label>
+        </div>
+        <div class="row">
+          <label><input type="checkbox" id="etFix" />需订正</label>
+          <label><input type="checkbox" id="etTrain" />奖励培养</label>
+          <label><input type="checkbox" id="etGrantSearch" />奖励寻访机会</label>
+        </div>
+        <div class="row">
+          <input type="text" id="etDesc" placeholder="任务描述" style="flex:1;min-width:200px" />
+          <input type="text" id="etHint" placeholder="提示语" style="flex:1;min-width:200px" />
+        </div>
+        <div class="row">
+          <button class="go" id="btnSaveEdit">保存修改</button>
+          <button id="btnCancelEdit">取消</button>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:12px;">
+        <button id="btnResetTasks">恢复默认任务</button>
+      </div>
+      <p class="msg" id="taskMsg"></p>
+    </section>
+
+    <section>
+      <h2>🎚 难度调节 <small>覆盖游戏内 RULES 数值，保存后刷新游戏页面生效</small></h2>
+      <div id="ruleList"></div>
+      <div class="row">
+        <button class="go" id="btnSaveRules">保存难度设置</button>
+        <button id="btnResetRules">恢复默认</button>
+      </div>
+      <p class="msg" id="ruleMsg"></p>
+    </section>
+
+    <section>
+      <h2>📊 打卡统计</h2>
+      <div class="stats" id="statCards"></div>
+      <table id="statTable">
+        <thead><tr><th>任务</th><th>累计完成次数</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <p class="hintline" id="statHint"></p>
+    </section>
+
+    <section>
+      <h2>💾 存档与安全</h2>
+      <div class="row">
+        <button class="danger" id="btnResetSave">重置游戏存档（清空进度，保留任务与难度）</button>
+        <button class="danger" id="btnResetAll">全部恢复出厂（存档 + 任务 + 难度）</button>
+      </div>
+      <p class="lead" style="margin-top:12px">修改家长密码：</p>
+      <div class="row">
+        <input type="password" id="newPwd" placeholder="新密码" />
+        <button class="go" id="btnPwd">保存新密码</button>
+      </div>
+      <p class="msg" id="saveMsg"></p>
+    </section>
+  </div>
+</div>
+
+<script type="module" src="./js/admin.js"></script>
+</body>
+</html>

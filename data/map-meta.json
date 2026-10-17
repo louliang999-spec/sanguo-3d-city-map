@@ -1,0 +1,43 @@
+{
+  "project": "20261017054053",
+  "zoom": 6,
+  "tiles": {
+    "xMin": 44,
+    "xMax": 56,
+    "yMin": 20,
+    "yMax": 28
+  },
+  "image": {
+    "width": 3328,
+    "height": 2304
+  },
+  "mask": {
+    "width": 1664,
+    "height": 1152,
+    "div": 2
+  },
+  "heightmap": {
+    "width": 832,
+    "height": 576,
+    "div": 4,
+    "maxElev": 9000.0,
+    "encoding": "png16",
+    "stats": {
+      "min": 0.0,
+      "max": 6049.242,
+      "mean": 425.615
+    }
+  },
+  "bbox": {
+    "west": 73,
+    "south": 17,
+    "east": 136,
+    "north": 54.5
+  },
+  "originPx": {
+    "x": 11264.0,
+    "y": 5120.0
+  },
+  "edgeFadePx": 70,
+  "generatedAt": "2026-10-16T11:28:28.808Z"
+}

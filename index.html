@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>三国 · 群英学习志 | 3D 立体地图 · 备考通关</title>
+<link rel="stylesheet" href="./css/style.css" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='%23ffd166'/%3E%3C/svg%3E" />
+<!--
+  importmap: three.js 放在本地 vendor/ 目录，不依赖外网 CDN，
+  断网、内网、或预览环境里都能正常打开。
+-->
+<script type="importmap">
+{
+  "imports": {
+    "three": "./vendor/three/three.module.js",
+    "three/addons/": "./vendor/three/"
+  }
+}
+</script>
+</head>
+<body>
+<div id="app">
+  <canvas id="scene"></canvas>
+  <div id="labels" class="labels"></div>
+
+  <!-- 资源栏 -->
+  <div class="resbar" id="resbar"></div>
+
+  <!-- 左侧主公信息面板 -->
+  <aside class="citypanel" id="citypanel"></aside>
+
+  <!-- 右侧今日打卡面板 -->
+  <aside class="taskpanel" id="taskpanel"></aside>
+
+  <!-- hover 城池情报 -->
+  <div class="tooltip" id="tooltip" hidden></div>
+
+  <!-- 右上角小地图(鸟瞰图 + 视野框 + 缩放, 按住可拖动) -->
+  <div class="minimap" id="minimapBox">
+    <p class="minimap__head">全国 · 小地图（按住拖动）</p>
+    <canvas class="minimap__canvas" id="minimap"></canvas>
+    <div class="minimap__ctl">
+      <button data-mm="out" title="缩小">−</button>
+      <button data-mm="in" title="放大">＋</button>
+    </div>
+  </div>
+
+  <!-- 底部功能菜单 -->
+  <div class="phasebar" id="phasebar"></div>
+
+  <!-- 二级页面（全屏覆盖） -->
+  <div id="page" hidden></div>
+
+  <!-- 游戏弹窗（三级） -->
+  <div id="modal" hidden></div>
+
+  <!-- 轻提示 -->
+  <div class="toast" id="toast"></div>
+
+  <!-- 拿不到 WebGL 时展示的静态效果图兜底 -->
+  <div class="fallback" id="fallback" hidden>
+    <img class="fallback__img" id="fallbackImg" alt="3D 立体地图效果图（本机浏览器渲染）" />
+  </div>
+
+  <div class="loading" id="loading">
+    <div class="loading__ring"></div>
+    <p class="loading__text" id="loadingText">正在加载地形数据…</p>
+  </div>
+
+  <div class="errbox" id="errbox" hidden></div>
+</div>
+
+<!-- 启动守卫: 普通脚本, 必须在 main.js 之前加载 -->
+<script src="./js/boot-guard.js"></script>
+<script type="module" src="./js/main.js"></script>
+</body>
+</html>
